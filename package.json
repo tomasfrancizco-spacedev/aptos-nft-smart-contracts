@@ -1,0 +1,22 @@
+{
+  "name": "ufc-nft-script",
+  "version": "1.0.0",
+  "description": "Scripts for interacting with the UFC NFT contract",
+  "main": "scripts/ufc-nft.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node scripts/ufc-nft.ts",
+    "create-collection": "ts-node scripts/ufc-nft.ts create-collection",
+    "mint": "ts-node scripts/ufc-nft.ts mint",
+    "mint-for": "ts-node scripts/ufc-nft.ts mint-for"
+  },
+  "dependencies": {
+    "aptos": "^1.16.2",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.10",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  }
+}
