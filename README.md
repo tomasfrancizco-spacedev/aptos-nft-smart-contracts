@@ -1,4 +1,4 @@
-# UFC NFT Scripts
+# Aptos UFC NFT Scripts
 
 This repository contains scripts to interact with the UFC NFT contract on the Aptos blockchain.
 
