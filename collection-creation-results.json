@@ -1,0 +1,213 @@
+{
+  "summary": {
+    "total": 50,
+    "successful": 50,
+    "failed": 0,
+    "duration": 480.147,
+    "totalScriptDuration": 481.222,
+    "startTime": "2025-06-05T20:35:31.459Z",
+    "endTime": "2025-06-05T20:43:32.681Z"
+  },
+  "collections": [
+    {
+      "name": "UFC Fighters #1",
+      "hash": "0x79b08e6f3f09e32db0bd3ee0c6f6bfe29117d4b18b62ef80a9912aef88719f8f"
+    },
+    {
+      "name": "UFC Fighters #2",
+      "hash": "0x6b48426e14dc9be453e8e9cb2f6554720b172f077b495e8c469dd3a27cd7c30a"
+    },
+    {
+      "name": "UFC Fighters #3",
+      "hash": "0xe605e3f55f5ffab8b915391b1eb75d73ded29960576dfc0cdfa1370e4563a10a"
+    },
+    {
+      "name": "UFC Fighters #4",
+      "hash": "0xe7b5bf7f2393e8692138a6ef51fa655311c37a2db1069f0b165b61e32afadf04"
+    },
+    {
+      "name": "UFC Fighters #5",
+      "hash": "0xc5b4ac5a559c045d0eaf2acee8c287a299a53e6c32ba838e7be22d1b179cfb40"
+    },
+    {
+      "name": "UFC Fighters #6",
+      "hash": "0x8960f1a81341d652e59e8bd28f3cb331fea92fd1399e726d33b2a63e5ad9b852"
+    },
+    {
+      "name": "UFC Fighters #7",
+      "hash": "0x0bcac89b5d58a450d6ef1c2de9144e9ae9334db66b998c922e31fb8db9401e24"
+    },
+    {
+      "name": "UFC Fighters #8",
+      "hash": "0xfc673f1fa0c886d8c93abb93dff49bd795ddbbddf251f19ead910f75e8f64278"
+    },
+    {
+      "name": "UFC Fighters #9",
+      "hash": "0xc79e49e25114f06548cc1fd4767e3088c050f2c70f17c10153791d214be9062b"
+    },
+    {
+      "name": "UFC Fighters #10",
+      "hash": "0xcb3a87b7e8a212506a45c39152edbac67d898559e41c3b6d8d892bcd457a798f"
+    },
+    {
+      "name": "UFC Fighters #11",
+      "hash": "0xb9378bf625954dc253bf8be5be4bbe4eb48133ace7e9758d82ca7877df9238a2"
+    },
+    {
+      "name": "UFC Fighters #12",
+      "hash": "0x66e74e633fd1ac3c384b64fbc1431ba63056996de183ead11c7a1fc614f8f97d"
+    },
+    {
+      "name": "UFC Fighters #13",
+      "hash": "0x96942e02efd848b7a410a539e655cbba4dad29c7e7f79a131bf24f20a7b299d9"
+    },
+    {
+      "name": "UFC Fighters #14",
+      "hash": "0xed2da19a3dfc1e6cc2871e9620fe2ec85b477299066e8184e58739dcc96970f8"
+    },
+    {
+      "name": "UFC Fighters #15",
+      "hash": "0x1745d17eb82c5d3f4452573c8ffd23a58ffda5b56350003dc420e2d62cb72526"
+    },
+    {
+      "name": "UFC Fighters #16",
+      "hash": "0xca523e451e8d21ea573d0c3abf04ab313e8ed1c4f3aea9209e429aa0efa618d6"
+    },
+    {
+      "name": "UFC Fighters #17",
+      "hash": "0x101881dc4fb91b47b67a698532e3ab3ee015d1c286d99d70e567310689c2d339"
+    },
+    {
+      "name": "UFC Fighters #18",
+      "hash": "0x53c5cca322a0de7a1e0c1bc2d6267154211d8d35728e8ecbc172d9ca34feaed6"
+    },
+    {
+      "name": "UFC Fighters #19",
+      "hash": "0x40037c6ab4f0a677877df571b7918c8a4c413a7944ffbe48ffc796ca1f811506"
+    },
+    {
+      "name": "UFC Fighters #20",
+      "hash": "0x5f1310416fb165fdcccdf94547724519fff24518c3acb86e479d577f984e4579"
+    },
+    {
+      "name": "UFC Fighters #21",
+      "hash": "0xe3132a8cf591381e52886e8b12332c7ce07a4b3a833c046c69bc37a04a3dbcbe"
+    },
+    {
+      "name": "UFC Fighters #22",
+      "hash": "0x8ae0380fe993ec88ae6dd31cb667d3afcf0c0dbb330c1d46b4844ef684a3e0da"
+    },
+    {
+      "name": "UFC Fighters #23",
+      "hash": "0xf15f82c51135fe97dd793dcc7b4b420b12e0674cceaa9c6313fc0978a9db4450"
+    },
+    {
+      "name": "UFC Fighters #24",
+      "hash": "0xa295c19429038660b7c5ceca5dd0958359360693311fb083541a89a34ea66a4e"
+    },
+    {
+      "name": "UFC Fighters #25",
+      "hash": "0x292e12247e058c8d0e172bc91798556bdefee447c59994d5fdd13a127635f35b"
+    },
+    {
+      "name": "UFC Fighters #26",
+      "hash": "0x6bec645fc7bef598fded44a13ef16604bcf9d1684d61523d2eaff8a7dbcb98c1"
+    },
+    {
+      "name": "UFC Fighters #27",
+      "hash": "0x38c1a4de25a1c8cad2a2f42a2808e9ae450fb0429351865b98184d9beae1c871"
+    },
+    {
+      "name": "UFC Fighters #28",
+      "hash": "0x96356b47bcc6aa456d078aad18de363fc0a7cac9385e47956fb3a876d5a22f24"
+    },
+    {
+      "name": "UFC Fighters #29",
+      "hash": "0x22191fc06b17dba7dd3032030cab0c6b6aeb2ac3565a01b4e11778c915abdc62"
+    },
+    {
+      "name": "UFC Fighters #30",
+      "hash": "0x46ed04159b4cbca7b4ffae91f95a404e87acb11a2c4912b8ab2f4771bc9dec55"
+    },
+    {
+      "name": "UFC Fighters #31",
+      "hash": "0x6d1fd260e295e3feeebdc0673e409995515685fefc968737fdccdf307e86913f"
+    },
+    {
+      "name": "UFC Fighters #32",
+      "hash": "0xf12b34251cfe12aa28f1bb5db4694b9daf9eb5e91ee5441a754fce5ebfa53b9c"
+    },
+    {
+      "name": "UFC Fighters #33",
+      "hash": "0x9a116c7257dce195ba1432e6b40e9a980aab5180a88fb1a3729afbbb52ff682d"
+    },
+    {
+      "name": "UFC Fighters #34",
+      "hash": "0x193919f917799a0feb52f6a9ba05b1c64bac99b5f936c6db39cc7e3f2a00d789"
+    },
+    {
+      "name": "UFC Fighters #35",
+      "hash": "0x6bfc2832500e4b682a196f8a1a100cd230507d4a4b99b92d6672c1ec2ad16a79"
+    },
+    {
+      "name": "UFC Fighters #36",
+      "hash": "0x44cc60b792cefd6ad5d69925e432977876a14cbe81e50ae66aa98fb2acb9b44b"
+    },
+    {
+      "name": "UFC Fighters #37",
+      "hash": "0x59a5327a62084916bffee96bade2c02ed7d8f56ba7a06a36b94ee96cce4debf3"
+    },
+    {
+      "name": "UFC Fighters #38",
+      "hash": "0xc82b5d9b74402164a1de39384f6a5bc8d47585584096a6dab55959638e6ba68e"
+    },
+    {
+      "name": "UFC Fighters #39",
+      "hash": "0xc7019ae5acc138af0ce8440aa1d007e8e87b9e60f4d526fe0ef15e26fb373ced"
+    },
+    {
+      "name": "UFC Fighters #40",
+      "hash": "0xb27acad46d9cae8dc4ea7cf9ce665f2c84deb478427d16a4f59fee6c531ce8f7"
+    },
+    {
+      "name": "UFC Fighters #41",
+      "hash": "0xdf7bac93b3222395679cccc410f1ed1e15ffed53d35c5cd33b51c9c84ba62467"
+    },
+    {
+      "name": "UFC Fighters #42",
+      "hash": "0x7334e2025386dcc5b8daece79268a8d3c49bdb2dda17583e0c19ea993c6268ae"
+    },
+    {
+      "name": "UFC Fighters #43",
+      "hash": "0xc6972292a4d70aaefffe7331d4c6e3027b618e723c06db54f557aa8614b442ed"
+    },
+    {
+      "name": "UFC Fighters #44",
+      "hash": "0x630ad9bbba7971285e678ed925e7b16ddda1ef735a32e26b1307403eaa301245"
+    },
+    {
+      "name": "UFC Fighters #45",
+      "hash": "0x3496063a6680c8e6e990411577a3e2583581ea95158cc3eddb490345fe80f0b8"
+    },
+    {
+      "name": "UFC Fighters #46",
+      "hash": "0xb2a7cf123691f69375e810afb8c2e879768b92fffd8e914d40f4747e94833ab5"
+    },
+    {
+      "name": "UFC Fighters #47",
+      "hash": "0x72a1b252e73afad87d5063a189ceeb8bab87e81b6c5f50ea2242adf1960345e5"
+    },
+    {
+      "name": "UFC Fighters #48",
+      "hash": "0xd5972b8fdeab00c598f58b90028ce50d79e36a42d21c8dfa49dc57391fb39dd1"
+    },
+    {
+      "name": "UFC Fighters #49",
+      "hash": "0x810eac1dff183b54f3b054e39b4d95c83bb1ba5daf64d80c8713bd054b76d6ef"
+    },
+    {
+      "name": "UFC Fighters #50",
+      "hash": "0xd2ccc00461b30f868c3f3d3ecd77b1aec1801dd54c8861961b49fb2d845ea564"
+    }
+  ]
+}

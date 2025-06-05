@@ -4,3 +4,6 @@ build/
 admin_private_key.txt
 recipient-key.json
 recipient-key.json.pub
+
+node_modules/
+.env

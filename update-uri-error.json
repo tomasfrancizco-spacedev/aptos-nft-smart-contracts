@@ -1,0 +1,9 @@
+{
+  "success": false,
+  "error": "0x70c3a99237fe6e34da53a324b53685aeffb20c09b35681eb32c7718bd36179dc::ufc_nft::set_uri doesn't exist.",
+  "digitalAssetAddress": "0xe7997c14b16417a76a50425e485810a1fb4514b773ae9cda5d30c1638902603d",
+  "duration": 1.395,
+  "startTime": "2025-06-05T20:02:32.953Z",
+  "endTime": "2025-06-05T20:02:34.348Z",
+  "timestamp": "2025-06-05T20:02:34.366Z"
+}

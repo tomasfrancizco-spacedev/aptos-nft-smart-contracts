@@ -24,24 +24,29 @@ module UFC_NFT::ufc_nft {
     const ETOKEN_URI_TOO_LONG: u64 = 10;
     /// The token description is too long
     const ETOKEN_DESCRIPTION_TOO_LONG: u64 = 11;
-    /// Token ID already exists
-    const ETOKEN_ID_ALREADY_EXISTS: u64 = 12;
+    /// Batch size too large
+    const EBATCH_SIZE_TOO_LARGE: u64 = 12;
+    /// Empty batch not allowed
+    const EEMPTY_BATCH: u64 = 13;
+    /// Recipients and URIs vectors must have same length
+    const EVECTOR_LENGTH_MISMATCH: u64 = 14;
+    /// Collections and URIs vectors must have same length
+    const ECOLLECTION_VECTOR_LENGTH_MISMATCH: u64 = 15;
 
-    /// Maximum length for strings
-    const MAX_STRING_LENGTH: u64 = 128;
+    /// Maximum length for strings (increased for longer collection names)
+    const MAX_STRING_LENGTH: u64 = 100;
+    /// Maximum batch size for gas efficiency
+    const MAX_BATCH_SIZE: u64 = 100;
 
-    /// Mapping of token IDs to track which ones have been used
+    /// Token registry to track sequential IDs
     struct TokenRegistry has key {
-        used_ids: vector<u64>,
+        next_id: u64,
     }
 
-    /// Metadata for UFC NFTs
+    /// Simplified metadata for UFC NFTs with URI
     struct UFCTokenMetadata has key {
         id: u64,
-        fighter_name: String,
-        weight_class: String,
-        record: String,
-        ranking: u64,
+        uri: String,
         token_address: address,
     }
 
@@ -63,10 +68,6 @@ module UFC_NFT::ufc_nft {
         name: String,
         uri: String,
         description: String,
-        fighter_name: String,
-        weight_class: String,
-        record: String,
-        ranking: u64,
     }
 
     /// Collection events
@@ -83,54 +84,72 @@ module UFC_NFT::ufc_nft {
             token_minted_events: account::new_event_handle(account),
         });
 
-        // Initialize token registry
+        // Initialize token registry with sequential counter
         move_to(account, TokenRegistry {
-            used_ids: vector[],
+            next_id: 1,
         });
     }
 
-    /// Check if a token ID is already used
-    fun is_token_id_used(token_id: u64): bool acquires TokenRegistry {
-        let registry = borrow_global<TokenRegistry>(@UFC_NFT);
-        let i = 0;
-        let len = vector::length(&registry.used_ids);
-        
-        while (i < len) {
-            if (*vector::borrow(&registry.used_ids, i) == token_id) {
-                return true
-            };
-            i = i + 1;
+    /// Get next sequential token ID and increment counter
+    fun get_next_token_id(): u64 acquires TokenRegistry {
+        let registry = borrow_global_mut<TokenRegistry>(@UFC_NFT);
+        let current_id = registry.next_id;
+        registry.next_id = registry.next_id + 1;
+        current_id
+    }
+
+    /// Helper function to convert u64 to string
+    fun to_string(value: u64): String {
+        if (value == 0) {
+            return string::utf8(b"0")
         };
         
-        false
+        let buffer = vector::empty<u8>();
+        while (value != 0) {
+            let digit = ((value % 10) as u8) + 48; // ASCII offset for '0'
+            vector::push_back(&mut buffer, digit);
+            value = value / 10;
+        };
+        
+        // Reverse the buffer
+        vector::reverse(&mut buffer);
+        string::utf8(buffer)
     }
 
-    /// Register a new token ID as used
-    fun register_token_id(token_id: u64) acquires TokenRegistry {
-        let registry = borrow_global_mut<TokenRegistry>(@UFC_NFT);
-        vector::push_back(&mut registry.used_ids, token_id);
-    }
-
-    /// Create a new collection
+    /// Create a new collection with optional URI mutability
     public entry fun create_collection(
         creator: &signer,
         name: String,
         uri: String,
         description: String,
         maximum: u64,
+        mutable_uri: bool,
     ) acquires CollectionEvents {
         assert!(string::length(&name) <= MAX_STRING_LENGTH, error::invalid_argument(ECOLLECTION_NAME_TOO_LONG));
         assert!(string::length(&uri) <= MAX_STRING_LENGTH, error::invalid_argument(ECOLLECTION_URI_TOO_LONG));
         assert!(string::length(&description) <= MAX_STRING_LENGTH, error::invalid_argument(ECOLLECTION_DESCRIPTION_TOO_LONG));
 
-        let _constructor_ref = collection::create_fixed_collection(
-            creator,
-            description,
-            maximum,
-            name,
-            option::none(),
-            uri,
-        );
+        // Create collection based on whether we want unlimited supply for mutability support
+        let _constructor_ref = if (mutable_uri) {
+            // Use unlimited collection to support mutability
+            collection::create_unlimited_collection(
+                creator,
+                description,
+                name,
+                option::none(),
+                uri,
+            )
+        } else {
+            // Use fixed collection for traditional behavior
+            collection::create_fixed_collection(
+                creator,
+                description,
+                maximum,
+                name,
+                option::none(),
+                uri,
+            )
+        };
 
         // Emit collection created event
         let collection_events = borrow_global_mut<CollectionEvents>(@UFC_NFT);
@@ -146,141 +165,154 @@ module UFC_NFT::ufc_nft {
         );
     }
 
-    /// Mint a new token with a custom ID
-    public entry fun mint_token(
+    /// Batch mint multiple tokens with sequential IDs (most gas-efficient)
+    public entry fun batch_mint_simple(
         creator: &signer,
-        token_id: u64,
-        collection: String,
-        name: String,
-        uri: String,
-        description: String,
-        fighter_name: String,
-        weight_class: String,
-        record: String,
-        ranking: u64,
+        collections: vector<String>,
+        uris: vector<String>,
     ) acquires CollectionEvents, TokenRegistry {
-        assert!(string::length(&name) <= MAX_STRING_LENGTH, error::invalid_argument(ETOKEN_NAME_TOO_LONG));
-        assert!(string::length(&uri) <= MAX_STRING_LENGTH, error::invalid_argument(ETOKEN_URI_TOO_LONG));
-        assert!(string::length(&description) <= MAX_STRING_LENGTH, error::invalid_argument(ETOKEN_DESCRIPTION_TOO_LONG));
+        // Validate batch parameters
+        let batch_size = vector::length(&uris);
+        let collections_len = vector::length(&collections);
+        assert!(batch_size == collections_len, error::invalid_argument(ECOLLECTION_VECTOR_LENGTH_MISMATCH));
+        assert!(batch_size <= MAX_BATCH_SIZE, error::invalid_argument(EBATCH_SIZE_TOO_LARGE));
+        assert!(batch_size > 0, error::invalid_argument(EEMPTY_BATCH));
         
-        // Check if token ID is already used
-        assert!(!is_token_id_used(token_id), error::already_exists(ETOKEN_ID_ALREADY_EXISTS));
-
-        let constructor_ref = token::create_named_token(
-            creator,
-            collection,
-            description,
-            name,
-            option::none(),
-            uri,
-        );
-
-        let token_object = object::object_from_constructor_ref<Token>(&constructor_ref);
-        let token_address = object::object_address(&token_object);
-
-        // Register the token ID as used
-        register_token_id(token_id);
-
-        // Create metadata and store it in token's resources
-        let token_signer = object::generate_signer(&constructor_ref);
-        let metadata = UFCTokenMetadata {
-            id: token_id,
-            fighter_name,
-            weight_class,
-            record,
-            ranking,
-            token_address,
-        };
-        move_to(&token_signer, metadata);
-
-        // Emit token minted event
         let collection_events = borrow_global_mut<CollectionEvents>(@UFC_NFT);
-        event::emit_event(
-            &mut collection_events.token_minted_events,
-            TokenMintedEvent {
-                token_id: token_address,
-                metadata_id: token_id,
-                creator: signer::address_of(creator),
+        let creator_address = signer::address_of(creator);
+        
+        // Process each URI in the batch
+        let i = 0;
+        while (i < batch_size) {
+            let uri = *vector::borrow(&uris, i);
+            let collection = *vector::borrow(&collections, i);
+            
+            // Validate URI and collection name
+            assert!(string::length(&uri) <= MAX_STRING_LENGTH, error::invalid_argument(ETOKEN_URI_TOO_LONG));
+            assert!(string::length(&collection) <= MAX_STRING_LENGTH, error::invalid_argument(ECOLLECTION_NAME_TOO_LONG));
+            
+            // Get next sequential token ID
+            let token_id = get_next_token_id();
+            
+            // Use token ID as name for simplicity
+            let name = string::utf8(b"Token #");
+            string::append(&mut name, to_string(token_id));
+
+            let constructor_ref = token::create_named_token(
+                creator,
                 collection,
+                string::utf8(b"Batch minted token"), // generic description
                 name,
+                option::none(),
                 uri,
-                description,
-                fighter_name,
-                weight_class,
-                record,
-                ranking,
-            },
-        );
+            );
+
+            let token_object = object::object_from_constructor_ref<Token>(&constructor_ref);
+            let token_address = object::object_address(&token_object);
+
+            // Create simplified metadata and store it in token's resources
+            let token_signer = object::generate_signer(&constructor_ref);
+            let metadata = UFCTokenMetadata {
+                id: token_id,
+                uri,
+                token_address,
+            };
+            move_to(&token_signer, metadata);
+
+            // Emit token minted event
+            event::emit_event(
+                &mut collection_events.token_minted_events,
+                TokenMintedEvent {
+                    token_id: token_address,
+                    metadata_id: token_id,
+                    creator: creator_address,
+                    collection,
+                    name,
+                    uri,
+                    description: string::utf8(b"Batch minted token"),
+                },
+            );
+            
+            i = i + 1;
+        };
     }
-    
-    /// Mint a new token with a custom ID and transfer it directly to the recipient
-    public entry fun mint_token_for(
+
+    /// Batch mint multiple tokens for different recipients
+    public entry fun batch_mint_simple_for(
         creator: &signer,
-        recipient: address,
-        token_id: u64,
-        collection: String,
-        name: String,
-        uri: String,
-        description: String,
-        fighter_name: String,
-        weight_class: String,
-        record: String,
-        ranking: u64,
+        collections: vector<String>,
+        recipients: vector<address>,
+        uris: vector<String>,
     ) acquires CollectionEvents, TokenRegistry {
-        assert!(string::length(&name) <= MAX_STRING_LENGTH, error::invalid_argument(ETOKEN_NAME_TOO_LONG));
-        assert!(string::length(&uri) <= MAX_STRING_LENGTH, error::invalid_argument(ETOKEN_URI_TOO_LONG));
-        assert!(string::length(&description) <= MAX_STRING_LENGTH, error::invalid_argument(ETOKEN_DESCRIPTION_TOO_LONG));
+        // Validate batch parameters
+        let batch_size = vector::length(&uris);
+        let recipients_len = vector::length(&recipients);
+        let collections_len = vector::length(&collections);
+        assert!(batch_size == recipients_len, error::invalid_argument(EVECTOR_LENGTH_MISMATCH));
+        assert!(batch_size == collections_len, error::invalid_argument(ECOLLECTION_VECTOR_LENGTH_MISMATCH));
+        assert!(batch_size <= MAX_BATCH_SIZE, error::invalid_argument(EBATCH_SIZE_TOO_LARGE));
+        assert!(batch_size > 0, error::invalid_argument(EEMPTY_BATCH));
         
-        // Check if token ID is already used
-        assert!(!is_token_id_used(token_id), error::already_exists(ETOKEN_ID_ALREADY_EXISTS));
-
-        let constructor_ref = token::create_named_token(
-            creator,
-            collection,
-            description,
-            name,
-            option::none(),
-            uri,
-        );
-
-        let token_object = object::object_from_constructor_ref<Token>(&constructor_ref);
-        let token_address = object::object_address(&token_object);
-
-        // Register the token ID as used
-        register_token_id(token_id);
-
-        // Create metadata and store it in token's resources
-        let token_signer = object::generate_signer(&constructor_ref);
-        let metadata = UFCTokenMetadata {
-            id: token_id,
-            fighter_name,
-            weight_class,
-            record,
-            ranking,
-            token_address,
-        };
-        move_to(&token_signer, metadata);
-        
-        // Transfer the token to the recipient
-        object::transfer(creator, token_object, recipient);
-
-        // Emit token minted event
         let collection_events = borrow_global_mut<CollectionEvents>(@UFC_NFT);
-        event::emit_event(
-            &mut collection_events.token_minted_events,
-            TokenMintedEvent {
-                token_id: token_address,
-                metadata_id: token_id,
-                creator: signer::address_of(creator),
+        let creator_address = signer::address_of(creator);
+        
+        // Process each token in the batch
+        let i = 0;
+        while (i < batch_size) {
+            let uri = *vector::borrow(&uris, i);
+            let recipient = *vector::borrow(&recipients, i);
+            let collection = *vector::borrow(&collections, i);
+            
+            // Validate URI and collection name
+            assert!(string::length(&uri) <= MAX_STRING_LENGTH, error::invalid_argument(ETOKEN_URI_TOO_LONG));
+            assert!(string::length(&collection) <= MAX_STRING_LENGTH, error::invalid_argument(ECOLLECTION_NAME_TOO_LONG));
+            
+            // Get next sequential token ID
+            let token_id = get_next_token_id();
+            
+            // Use token ID as name for simplicity
+            let name = string::utf8(b"Token #");
+            string::append(&mut name, to_string(token_id));
+
+            let constructor_ref = token::create_named_token(
+                creator,
                 collection,
+                string::utf8(b"Batch minted token"), // generic description
                 name,
+                option::none(),
                 uri,
-                description,
-                fighter_name,
-                weight_class,
-                record,
-                ranking,
-            },
-        );
+            );
+
+            let token_object = object::object_from_constructor_ref<Token>(&constructor_ref);
+            let token_address = object::object_address(&token_object);
+
+            // Create simplified metadata and store it in token's resources
+            let token_signer = object::generate_signer(&constructor_ref);
+            let metadata = UFCTokenMetadata {
+                id: token_id,
+                uri,
+                token_address,
+            };
+            move_to(&token_signer, metadata);
+            
+            // Transfer the token to the recipient
+            object::transfer(creator, token_object, recipient);
+
+            // Emit token minted event
+            event::emit_event(
+                &mut collection_events.token_minted_events,
+                TokenMintedEvent {
+                    token_id: token_address,
+                    metadata_id: token_id,
+                    creator: creator_address,
+                    collection,
+                    name,
+                    uri,
+                    description: string::utf8(b"Batch minted token"),
+                },
+            );
+            
+            i = i + 1;
+        };
     }
 } 

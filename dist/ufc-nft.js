@@ -55,7 +55,17 @@ async function loadAccount(privateKeyHex) {
             throw new Error('Private key not found in config');
         }
         const privateKeyFromConfig = privateKeyLine.split('private_key:')[1].trim().replace(/['"]/g, '');
-        return new aptos_1.AptosAccount(aptos_1.HexString.ensure(privateKeyFromConfig).toUint8Array());
+        // Handle different private key formats from Aptos CLI
+        let formattedPrivateKey = privateKeyFromConfig;
+        if (formattedPrivateKey.startsWith('ed25519-priv-0x')) {
+            // Remove the ed25519-priv- prefix and keep just the hex part
+            formattedPrivateKey = formattedPrivateKey.replace('ed25519-priv-', '');
+        }
+        else if (!formattedPrivateKey.startsWith('0x')) {
+            // Add 0x prefix if missing
+            formattedPrivateKey = '0x' + formattedPrivateKey;
+        }
+        return new aptos_1.AptosAccount(aptos_1.HexString.ensure(formattedPrivateKey).toUint8Array());
     }
     catch (e) {
         // Generate a new account if config doesn't exist
@@ -96,61 +106,58 @@ async function createCollection(account, name, uri, description, maximum) {
     console.log(`Collection created! Transaction hash: ${txnResult.hash}`);
     return txnResult.hash;
 }
-async function mintToken(account, tokenId, collection, name, uri, description, fighterName, weightClass, record, ranking) {
-    console.log(`Minting token: ${name} with ID ${tokenId}...`);
+async function batchMintSimple(account, collections, uris) {
+    console.log(`Batch minting ${uris.length} tokens to ${collections.length} collections...`);
+    if (collections.length !== uris.length) {
+        throw new Error("Collections and URIs arrays must have the same length");
+    }
     const payload = {
         type: "entry_function_payload",
-        function: `${CONTRACT_ADDRESS}::ufc_nft::mint_token`,
+        function: `${CONTRACT_ADDRESS}::ufc_nft::batch_mint_simple`,
         type_arguments: [],
-        arguments: [
-            tokenId.toString(),
-            collection,
-            name,
-            uri,
-            description,
-            fighterName,
-            weightClass,
-            record,
-            ranking.toString()
-        ],
+        arguments: [collections, uris],
     };
     const txnRequest = await client.generateTransaction(account.address(), payload);
     const signedTxn = await client.signTransaction(account, txnRequest);
     const txnResult = await client.submitTransaction(signedTxn);
     await client.waitForTransaction(txnResult.hash);
-    console.log(`Token minted! Transaction hash: ${txnResult.hash}`);
+    console.log(`Batch minted ${uris.length} tokens! Transaction hash: ${txnResult.hash}`);
     return txnResult.hash;
 }
-async function mintTokenFor(account, recipient, tokenId, collection, name, uri, description, fighterName, weightClass, record, ranking) {
-    console.log(`Minting token: ${name} with ID ${tokenId} for recipient ${recipient}...`);
+async function batchMintSimpleFor(account, collections, recipients, uris) {
+    console.log(`Batch minting ${uris.length} tokens for ${recipients.length} recipients across ${collections.length} collections...`);
+    if (recipients.length !== uris.length || collections.length !== uris.length) {
+        throw new Error("Collections, recipients, and URIs arrays must all have the same length");
+    }
     const payload = {
         type: "entry_function_payload",
-        function: `${CONTRACT_ADDRESS}::ufc_nft::mint_token_for`,
+        function: `${CONTRACT_ADDRESS}::ufc_nft::batch_mint_simple_for`,
         type_arguments: [],
-        arguments: [
-            recipient,
-            tokenId.toString(),
-            collection,
-            name,
-            uri,
-            description,
-            fighterName,
-            weightClass,
-            record,
-            ranking.toString()
-        ],
+        arguments: [collections, recipients, uris],
     };
     const txnRequest = await client.generateTransaction(account.address(), payload);
     const signedTxn = await client.signTransaction(account, txnRequest);
     const txnResult = await client.submitTransaction(signedTxn);
     await client.waitForTransaction(txnResult.hash);
-    console.log(`Token minted for ${recipient}! Transaction hash: ${txnResult.hash}`);
+    console.log(`Batch minted ${uris.length} tokens for recipients! Transaction hash: ${txnResult.hash}`);
     return txnResult.hash;
+}
+// Helper function to parse comma-separated URIs
+function parseUris(urisString) {
+    return urisString.split(',').map(uri => uri.trim()).filter(uri => uri.length > 0);
+}
+// Helper function to parse comma-separated collections
+function parseCollections(collectionsString) {
+    return collectionsString.split(',').map(collection => collection.trim()).filter(collection => collection.length > 0);
+}
+// Helper function to parse comma-separated recipients
+function parseRecipients(recipientsString) {
+    return recipientsString.split(',').map(addr => addr.trim()).filter(addr => addr.length > 0);
 }
 // Main function that demonstrates usage
 async function main() {
-    console.log("UFC NFT Management Script");
-    console.log("=========================");
+    console.log("UFC NFT Management Script (Batch Version)");
+    console.log("==========================================");
     // Load or create account
     const account = await loadAccount();
     console.log(`Using account: ${account.address().hex()}`);
@@ -177,39 +184,58 @@ async function main() {
                 parseInt(args[4]) // maximum
                 );
                 break;
-            case "mint":
-                if (args.length < 10) {
-                    console.error("Missing parameters for mint");
+            case "batch-mint":
+                if (args.length < 4) {
+                    console.error("Missing parameters for batch-mint");
                     printUsage();
                     return;
                 }
-                await mintToken(account, parseInt(args[1]), // tokenId
-                args[2], // collection
-                args[3], // name
-                args[4], // uri
-                args[5], // description
-                args[6], // fighterName
-                args[7], // weightClass
-                args[8], // record
-                parseInt(args[9]) // ranking
+                const collections = parseCollections(args[2]);
+                const uris = parseUris(args[3]);
+                if (collections.length === 0) {
+                    console.error("No valid collections provided");
+                    return;
+                }
+                if (uris.length === 0) {
+                    console.error("No valid URIs provided");
+                    return;
+                }
+                if (collections.length !== uris.length) {
+                    console.error("Number of collections must match number of URIs");
+                    return;
+                }
+                await batchMintSimple(account, collections, // array of collections
+                uris // array of URIs
                 );
                 break;
-            case "mint-for":
-                if (args.length < 11) {
-                    console.error("Missing parameters for mint-for");
+            case "batch-mint-for":
+                if (args.length < 5) {
+                    console.error("Missing parameters for batch-mint-for");
                     printUsage();
                     return;
                 }
-                await mintTokenFor(account, args[1], // recipient
-                parseInt(args[2]), // tokenId
-                args[3], // collection
-                args[4], // name
-                args[5], // uri
-                args[6], // description
-                args[7], // fighterName
-                args[8], // weightClass
-                args[9], // record
-                parseInt(args[10]) // ranking
+                const collectionsFor = parseCollections(args[2]);
+                const recipients = parseRecipients(args[3]);
+                const urisFor = parseUris(args[4]);
+                if (collectionsFor.length === 0) {
+                    console.error("No valid collections provided");
+                    return;
+                }
+                if (recipients.length === 0) {
+                    console.error("No valid recipients provided");
+                    return;
+                }
+                if (urisFor.length === 0) {
+                    console.error("No valid URIs provided");
+                    return;
+                }
+                if (collectionsFor.length !== recipients.length || recipients.length !== urisFor.length) {
+                    console.error("Number of collections, recipients, and URIs must all match");
+                    return;
+                }
+                await batchMintSimpleFor(account, collectionsFor, // array of collections
+                recipients, // array of recipient addresses
+                urisFor // array of URIs
                 );
                 break;
             default:
@@ -226,14 +252,32 @@ async function main() {
 function printUsage() {
     console.log(`
 Usage:
-    node ufc-nft.js create-collection <name> <uri> <description> <maximum>
-    node ufc-nft.js mint <tokenId> <collection> <name> <uri> <description> <fighterName> <weightClass> <record> <ranking>
-    node ufc-nft.js mint-for <recipient> <tokenId> <collection> <name> <uri> <description> <fighterName> <weightClass> <record> <ranking>
+    npx ts-node scripts/ufc-nft.ts create-collection <name> <uri> <description> <maximum>
+    npx ts-node scripts/ufc-nft.ts batch-mint <collections_comma_separated> <uris_comma_separated>
+    npx ts-node scripts/ufc-nft.ts batch-mint-for <collections_comma_separated> <recipients_comma_separated> <uris_comma_separated>
 
 Examples:
-    node ufc-nft.js create-collection "UFC Collection" "https://ufc.com/collection" "The official UFC NFT collection" 10000
-    node ufc-nft.js mint 1 "UFC Collection" "Jon Jones" "https://ufc.com/nft/jon-jones" "UFC Heavyweight Champion Jon Jones" "Jon Jones" "Heavyweight" "27-1-0" 1
-    node ufc-nft.js mint-for 0xb51f2b3cdaf5fbe19532e245052261cf9aa242acacc73e1dfa79cb8cda44e75c 2 "UFC Collection" "Conor McGregor" "https://ufc.com/nft/conor-mcgregor" "UFC Champion Conor McGregor" "Conor McGregor" "Lightweight" "22-6-0" 5
+    # Create a collection
+    npx ts-node scripts/ufc-nft.ts create-collection "UFC Collection" "https://ufc.com/collection" "The official UFC NFT collection" 10000
+    
+    # Batch mint 3 tokens to different collections
+    npx ts-node scripts/ufc-nft.ts batch-mint "UFC Collection,UFC Fighters,UFC Belts" "ipfs://QmHash1,ipfs://QmHash2,ipfs://QmHash3"
+    
+    # Batch mint tokens to different recipients and collections
+    npx ts-node scripts/ufc-nft.ts batch-mint-for "UFC Collection,UFC Fighters,UFC Belts" "0xabc123...,0xdef456...,0x789xyz..." "ipfs://QmHash1,ipfs://QmHash2,ipfs://QmHash3"
+    
+    # Single token examples
+    npx ts-node scripts/ufc-nft.ts batch-mint "UFC Collection" "ipfs://QmJonJonesHash"
+    npx ts-node scripts/ufc-nft.ts batch-mint-for "UFC Collection" "0xb51f2b3cdaf5fbe19532e245052261cf9aa242acacc73e1dfa79cb8cda44e75c" "ipfs://QmConorHash"
+
+Note: 
+- Collections, URIs, and recipients should be comma-separated with no spaces (or spaces will be trimmed)
+- All arrays (collections, recipients, URIs) must have the same length for batch-mint-for
+- Collections and URIs must have the same length for batch-mint
+- Maximum batch size is 100 tokens per transaction
+- Each collection name can be up to 100 characters long
+- Tokens will be automatically named as "Token #1", "Token #2", etc.
+- All metadata should be stored in IPFS and referenced by the URI
 `);
 }
 // Run the main function

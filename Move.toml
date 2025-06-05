@@ -4,7 +4,7 @@ version = "1.0.0"
 authors = []
 
 [addresses]
-UFC_NFT = "0x5b4b6e2e43bd03f96692402f36c0103349c87dde06cb921552dace4db9dbf8cc"
+UFC_NFT = "0x70c3a99237fe6e34da53a324b53685aeffb20c09b35681eb32c7718bd36179dc"
 aptos_token_objects = "0x4"
 
 [dev-addresses]

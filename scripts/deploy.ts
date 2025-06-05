@@ -1,72 +1,47 @@
-import { AptosClient, AptosAccount, FaucetClient, HexString, Types } from "aptos";
-import { BCS, TxnBuilderTypes } from "aptos";
+import { spawn } from "child_process";
 import * as fs from "fs/promises";
-
-const NODE_URL = "https://fullnode.devnet.aptoslabs.com";
-const FAUCET_URL = "https://faucet.devnet.aptoslabs.com";
 
 (async () => {
     try {
-        // Create API and faucet clients
-        const client = new AptosClient(NODE_URL);
-        const faucetClient = new FaucetClient(NODE_URL, FAUCET_URL);
-
-        // Read private key from config
-        const configContent = await fs.readFile('.aptos/config.yaml', 'utf8');
-        const privateKeyLine = configContent.split('\n').find(line => line.includes('private_key:'));
-        if (!privateKeyLine) {
-            throw new Error('Private key not found in config');
+        console.log("🚀 Deploying UFC NFT Contract using Aptos CLI...");
+        
+        // Check if build files exist
+        try {
+            await fs.access('build/UFC_NFT/bytecode_modules/ufc_nft.mv');
+            console.log("✅ Build files found");
+        } catch (error) {
+            throw new Error("❌ Build files not found. Please run 'aptos move compile' first to build the contract.");
         }
-        const privateKeyHex = privateKeyLine.split('private_key:')[1].trim().replace(/['"]/g, '');
 
-        // Create account from private key
-        const account = new AptosAccount(
-            HexString.ensure(privateKeyHex).toUint8Array()
-        );
-
-        console.log("Loaded existing account from config");
-        console.log("Account address:", account.address().hex());
-
-        // Fund account
-        await faucetClient.fundAccount(account.address(), 100_000_000);
-        console.log("Account funded");
-
-        // Publish module
-        const metadataBytes = await fs.readFile('build/UFC_NFT/package-metadata.bcs');
-        const codeBytes = await fs.readFile('build/UFC_NFT/bytecode_modules/ufc_nft.mv');
-
-        const moduleHex = HexString.fromUint8Array(codeBytes).toString();
-        const metadataHex = HexString.fromUint8Array(metadataBytes).toString();
-
-        // Create a transaction payload for publishing the module
-        const payload: any = {
-            type: "module_bundle_payload",
-            modules: [
-                { bytecode: `0x${moduleHex}` }
-            ]
-        };
-
-        // Submit the transaction
-        const txnRequest = await client.generateTransaction(account.address(), payload);
-        const signedTxn = await client.signTransaction(account, txnRequest);
-        const txnResult = await client.submitTransaction(signedTxn);
+        // Use Aptos CLI to publish
+        console.log("📦 Publishing contract...");
         
-        console.log("Transaction submitted:", txnResult.hash);
-        console.log("Waiting for transaction to be processed...");
-        
-        const txnInfo = await client.waitForTransactionWithResult(txnResult.hash);
-        if (!txnInfo) {
-            throw new Error("Transaction info not found");
-        }
-        console.log("Transaction info:", JSON.stringify(txnInfo, null, 2));
-        
-        if (!(txnInfo as any).success) {
-            throw new Error(`Transaction failed: ${(txnInfo as any).vm_status}`);
-        }
-        
-        console.log("Module published successfully!");
+        const publishProcess = spawn('aptos', ['move', 'publish', '--assume-yes'], {
+            stdio: 'inherit',
+            cwd: process.cwd()
+        });
+
+        publishProcess.on('close', (code) => {
+            if (code === 0) {
+                console.log("🎉 Contract published successfully!");
+                console.log("📝 Your contract is now deployed on the Aptos blockchain");
+                console.log("🔗 You can now use the TypeScript scripts to interact with it");
+            } else {
+                console.error(`❌ Publishing failed with exit code ${code}`);
+                process.exit(1);
+            }
+        });
+
+        publishProcess.on('error', (error) => {
+            console.error("❌ Error running Aptos CLI:", error.message);
+            console.log("\n💡 Make sure you have Aptos CLI installed:");
+            console.log("   - macOS: brew install aptos");
+            console.log("   - Other: Download from https://github.com/aptos-labs/aptos-core/releases");
+            process.exit(1);
+        });
+
     } catch (error) {
-        console.error("Error:", error);
+        console.error("❌ Deploy Error:", error);
         process.exit(1);
     }
 })();

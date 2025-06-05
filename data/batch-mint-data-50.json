@@ -1,0 +1,254 @@
+{
+  "batchMintData": [
+    {
+      "collection": "UFC Fighters #1",
+      "recipient": "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
+      "uri": "https://ipfs.io/ipfs/QmToken1HashJonJones"
+    },
+    {
+      "collection": "UFC Fighters #2", 
+      "recipient": "0x2345678901bcdef12345678901bcdef12345678901bcdef12345678901bcdef1",
+      "uri": "https://ipfs.io/ipfs/QmToken2HashConorMcGregor"
+    },
+    {
+      "collection": "UFC Fighters #3",
+      "recipient": "0x3456789012cdef123456789012cdef123456789012cdef123456789012cdef12",
+      "uri": "https://ipfs.io/ipfs/QmToken3HashAmandaNunes"
+    },
+    {
+      "collection": "UFC Fighters #4",
+      "recipient": "0x456789013def123456789013def123456789013def123456789013def1234567",
+      "uri": "https://ipfs.io/ipfs/QmToken4HashKhabibNurmagomedov"
+    },
+    {
+      "collection": "UFC Fighters #5",
+      "recipient": "0x56789014ef123456789014ef123456789014ef123456789014ef123456789014",
+      "uri": "https://ipfs.io/ipfs/QmToken5HashRondaRousey"
+    },
+    {
+      "collection": "UFC Fighters #6",
+      "recipient": "0x6789015f123456789015f123456789015f123456789015f123456789015f1234",
+      "uri": "https://ipfs.io/ipfs/QmToken6HashIsraelAdesanya"
+    },
+    {
+      "collection": "UFC Fighters #7",
+      "recipient": "0x789016f123456789016f123456789016f123456789016f123456789016f12345",
+      "uri": "https://ipfs.io/ipfs/QmToken7HashFrancisNgannou"
+    },
+    {
+      "collection": "UFC Fighters #8",
+      "recipient": "0x89017f123456789017f123456789017f123456789017f123456789017f123456",
+      "uri": "https://ipfs.io/ipfs/QmToken8HashAlexanderVolkanovski"
+    },
+    {
+      "collection": "UFC Fighters #9",
+      "recipient": "0x9018f123456789018f123456789018f123456789018f123456789018f1234567",
+      "uri": "https://ipfs.io/ipfs/QmToken9HashCharlesOliveira"
+    },
+    {
+      "collection": "UFC Fighters #10",
+      "recipient": "0xa019f123456789019f123456789019f123456789019f123456789019f1234567",
+      "uri": "https://ipfs.io/ipfs/QmToken10HashLeonEdwards"
+    },
+    {
+      "collection": "UFC Fighters #11",
+      "recipient": "0xb01af123456789001af123456789001af123456789001af123456789001af123",
+      "uri": "https://ipfs.io/ipfs/QmToken11HashKamaruUsman"
+    },
+    {
+      "collection": "UFC Fighters #12",
+      "recipient": "0xc01bf123456789001bf123456789001bf123456789001bf123456789001bf123",
+      "uri": "https://ipfs.io/ipfs/QmToken12HashValentinShevchenko"
+    },
+    {
+      "collection": "UFC Fighters #13",
+      "recipient": "0xd01cf123456789001cf123456789001cf123456789001cf123456789001cf123",
+      "uri": "https://ipfs.io/ipfs/QmToken13HashStipeIocic"
+    },
+    {
+      "collection": "UFC Fighters #14",
+      "recipient": "0xe01df123456789001df123456789001df123456789001df123456789001df123",
+      "uri": "https://ipfs.io/ipfs/QmToken14HashDanielCormier"
+    },
+    {
+      "collection": "UFC Fighters #15",
+      "recipient": "0xf01ef123456789001ef123456789001ef123456789001ef123456789001ef123",
+      "uri": "https://ipfs.io/ipfs/QmToken15HashRobertWhittaker"
+    },
+    {
+      "collection": "UFC Fighters #16",
+      "recipient": "0x101ff123456789002ff123456789002ff123456789002ff123456789002ff123",
+      "uri": "https://ipfs.io/ipfs/QmToken16HashYoelRomero"
+    },
+    {
+      "collection": "UFC Fighters #17",
+      "recipient": "0x1120f123456789003ff123456789003ff123456789003ff123456789003ff123",
+      "uri": "https://ipfs.io/ipfs/QmToken17HashPauloCosta"
+    },
+    {
+      "collection": "UFC Fighters #18",
+      "recipient": "0x1230f123456789004ff123456789004ff123456789004ff123456789004ff123",
+      "uri": "https://ipfs.io/ipfs/QmToken18HashMarvinVettori"
+    },
+    {
+      "collection": "UFC Fighters #19",
+      "recipient": "0x1340f123456789005ff123456789005ff123456789005ff123456789005ff123",
+      "uri": "https://ipfs.io/ipfs/QmToken19HashJaredCannonier"
+    },
+    {
+      "collection": "UFC Fighters #20",
+      "recipient": "0x1450f123456789006ff123456789006ff123456789006ff123456789006ff123",
+      "uri": "https://ipfs.io/ipfs/QmToken20HashDerekBrunson"
+    },
+    {
+      "collection": "UFC Fighters #21",
+      "recipient": "0x1560f123456789007ff123456789007ff123456789007ff123456789007ff123",
+      "uri": "https://ipfs.io/ipfs/QmToken21HashDarrenTill"
+    },
+    {
+      "collection": "UFC Fighters #22",
+      "recipient": "0x1670f123456789008ff123456789008ff123456789008ff123456789008ff123",
+      "uri": "https://ipfs.io/ipfs/QmToken22HashKelvinGastelum"
+    },
+    {
+      "collection": "UFC Fighters #23",
+      "recipient": "0x1780f123456789009ff123456789009ff123456789009ff123456789009ff123",
+      "uri": "https://ipfs.io/ipfs/QmToken23HashJackHermansson"
+    },
+    {
+      "collection": "UFC Fighters #24",
+      "recipient": "0x1890f12345678900aff12345678900aff12345678900aff12345678900aff123",
+      "uri": "https://ipfs.io/ipfs/QmToken24HashSeanStrickland"
+    },
+    {
+      "collection": "UFC Fighters #25",
+      "recipient": "0x19a0f12345678900bff12345678900bff12345678900bff12345678900bff123",
+      "uri": "https://ipfs.io/ipfs/QmToken25HashUrijanFaber"
+    },
+    {
+      "collection": "UFC Fighters #26",
+      "recipient": "0x1ab0f12345678900cff12345678900cff12345678900cff12345678900cff123",
+      "uri": "https://ipfs.io/ipfs/QmToken26HashTJDillashaw"
+    },
+    {
+      "collection": "UFC Fighters #27",
+      "recipient": "0x1bc0f12345678900dff12345678900dff12345678900dff12345678900dff123",
+      "uri": "https://ipfs.io/ipfs/QmToken27HashAljonSterling"
+    },
+    {
+      "collection": "UFC Fighters #28",
+      "recipient": "0x1cd0f12345678900eff12345678900eff12345678900eff12345678900eff123",
+      "uri": "https://ipfs.io/ipfs/QmToken28HashPetrYan"
+    },
+    {
+      "collection": "UFC Fighters #29",
+      "recipient": "0x1de0f12345678900fff12345678900fff12345678900fff12345678900fff123",
+      "uri": "https://ipfs.io/ipfs/QmToken29HashJoseFigueredo"
+    },
+    {
+      "collection": "UFC Fighters #30",
+      "recipient": "0x1ef0f123456789011ff123456789011ff123456789011ff123456789011ff123",
+      "uri": "https://ipfs.io/ipfs/QmToken30HashRobFont"
+    },
+    {
+      "collection": "UFC Fighters #31",
+      "recipient": "0x2f10f123456789012ff123456789012ff123456789012ff123456789012ff123",
+      "uri": "https://ipfs.io/ipfs/QmToken31HashCoryGarbrandt"
+    },
+    {
+      "collection": "UFC Fighters #32",
+      "recipient": "0x3020f123456789013ff123456789013ff123456789013ff123456789013ff123",
+      "uri": "https://ipfs.io/ipfs/QmToken32HashDominikCruz"
+    },
+    {
+      "collection": "UFC Fighters #33",
+      "recipient": "0x3130f123456789014ff123456789014ff123456789014ff123456789014ff123",
+      "uri": "https://ipfs.io/ipfs/QmToken33HashFrankieEdgar"
+    },
+    {
+      "collection": "UFC Fighters #34",
+      "recipient": "0x3240f123456789015ff123456789015ff123456789015ff123456789015ff123",
+      "uri": "https://ipfs.io/ipfs/QmToken34HashBJPenn"
+    },
+    {
+      "collection": "UFC Fighters #35",
+      "recipient": "0x3350f123456789016ff123456789016ff123456789016ff123456789016ff123",
+      "uri": "https://ipfs.io/ipfs/QmToken35HashKennyFlorian"
+    },
+    {
+      "collection": "UFC Fighters #36",
+      "recipient": "0x3460f123456789017ff123456789017ff123456789017ff123456789017ff123",
+      "uri": "https://ipfs.io/ipfs/QmToken36HashCubSwanson"
+    },
+    {
+      "collection": "UFC Fighters #37",
+      "recipient": "0x3570f123456789018ff123456789018ff123456789018ff123456789018ff123",
+      "uri": "https://ipfs.io/ipfs/QmToken37HashJoseAldo"
+    },
+    {
+      "collection": "UFC Fighters #38",
+      "recipient": "0x3680f123456789019ff123456789019ff123456789019ff123456789019ff123",
+      "uri": "https://ipfs.io/ipfs/QmToken38HashMaxHolloway"
+    },
+    {
+      "collection": "UFC Fighters #39",
+      "recipient": "0x3790f12345678901aff12345678901aff12345678901aff12345678901aff123",
+      "uri": "https://ipfs.io/ipfs/QmToken39HashBrianOrtega"
+    },
+    {
+      "collection": "UFC Fighters #40",
+      "recipient": "0x38a0f12345678901bff12345678901bff12345678901bff12345678901bff123",
+      "uri": "https://ipfs.io/ipfs/QmToken40HashYairRodriguez"
+    },
+    {
+      "collection": "UFC Fighters #41",
+      "recipient": "0x39b0f12345678901cff12345678901cff12345678901cff12345678901cff123",
+      "uri": "https://ipfs.io/ipfs/QmToken41HashKoreanZombie"
+    },
+    {
+      "collection": "UFC Fighters #42",
+      "recipient": "0x3ac0f12345678901dff12345678901dff12345678901dff12345678901dff123",
+      "uri": "https://ipfs.io/ipfs/QmToken42HashCalvinKattar"
+    },
+    {
+      "collection": "UFC Fighters #43",
+      "recipient": "0x3bd0f12345678901eff12345678901eff12345678901eff12345678901eff123",
+      "uri": "https://ipfs.io/ipfs/QmToken43HashGigaChikadze"
+    },
+    {
+      "collection": "UFC Fighters #44",
+      "recipient": "0x3ce0f12345678901fff12345678901fff12345678901fff12345678901fff123",
+      "uri": "https://ipfs.io/ipfs/QmToken44HashArnoldAllen"
+    },
+    {
+      "collection": "UFC Fighters #45",
+      "recipient": "0x3df0f123456789021ff123456789021ff123456789021ff123456789021ff123",
+      "uri": "https://ipfs.io/ipfs/QmToken45HashJoshEmmett"
+    },
+    {
+      "collection": "UFC Fighters #46",
+      "recipient": "0x4e10f123456789022ff123456789022ff123456789022ff123456789022ff123",
+      "uri": "https://ipfs.io/ipfs/QmToken46HashSodiqYusuff"
+    },
+    {
+      "collection": "UFC Fighters #47",
+      "recipient": "0x4f20f123456789023ff123456789023ff123456789023ff123456789023ff123",
+      "uri": "https://ipfs.io/ipfs/QmToken47HashShaneSchneider"
+    },
+    {
+      "collection": "UFC Fighters #48",
+      "recipient": "0x5030f123456789024ff123456789024ff123456789024ff123456789024ff123",
+      "uri": "https://ipfs.io/ipfs/QmToken48HashHakimDawodu"
+    },
+    {
+      "collection": "UFC Fighters #49",
+      "recipient": "0x5140f123456789025ff123456789025ff123456789025ff123456789025ff123",
+      "uri": "https://ipfs.io/ipfs/QmToken49HashZubairaTukhugov"
+    },
+    {
+      "collection": "UFC Fighters #50",
+      "recipient": "0x5250f123456789026ff123456789026ff123456789026ff123456789026ff123",
+      "uri": "https://ipfs.io/ipfs/QmToken50HashLeroneMurphy"
+    }
+  ]
+} 

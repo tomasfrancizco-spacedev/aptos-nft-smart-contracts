@@ -1,14 +1,15 @@
 {
   "name": "ufc-nft-script",
   "version": "1.0.0",
-  "description": "Scripts for interacting with the UFC NFT contract",
+  "description": "Scripts for interacting with the UFC NFT contract (Batch Version)",
   "main": "scripts/ufc-nft.js",
   "scripts": {
     "build": "tsc",
     "start": "ts-node scripts/ufc-nft.ts",
+    "deploy": "ts-node scripts/deploy.ts",
     "create-collection": "ts-node scripts/ufc-nft.ts create-collection",
-    "mint": "ts-node scripts/ufc-nft.ts mint",
-    "mint-for": "ts-node scripts/ufc-nft.ts mint-for"
+    "batch-mint": "ts-node scripts/ufc-nft.ts batch-mint",
+    "batch-mint-for": "ts-node scripts/ufc-nft.ts batch-mint-for"
   },
   "dependencies": {
     "aptos": "^1.16.2",
